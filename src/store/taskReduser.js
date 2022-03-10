@@ -9,8 +9,7 @@ export function taskReduser(state = [], action) {
       return newArray
     }
     case 'task/deleted': {
-      let newArray = [...state]
-      newArray = newArray.filter((el) => el.id !== action.payload.id)
+      const newArray = [...state].filter((el) => el.id !== action.payload.id)
       return newArray
     }
     default:
