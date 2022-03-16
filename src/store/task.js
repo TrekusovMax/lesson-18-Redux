@@ -1,7 +1,24 @@
-import { createAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-const update = createAction('task/updated')
-const remove = createAction('task/removed')
+const initialState = [
+  { id: 1, title: 'Task 1', complited: false },
+  { id: 2, title: 'Task 2', complited: false },
+]
+
+const taskSlice = createSlice({name:"task", initialState, reducers:{
+  update(state,action){      
+    const elementIndex = state.findIndex(
+      (el) => el.id === action.payload.id,
+    )
+    state[elementIndex] = { ...state[elementIndex], ...action.payload }
+  },
+  remove(state,action){
+    return state.filter((el) => el.id !== action.payload.id)
+  }
+}
+})
+const {actions, reducer:taskReduser } = taskSlice
+const {update, remove} = actions
 
 export function taskCompleted(id) {
   return update({ id, complited: true })
@@ -11,25 +28,6 @@ export function titleChanged(id) {
 }
 export function taskDeleted(id) {
   return remove({ id })
-}
-
-function taskReduser(state = [], action) {
-  switch (action.type) {
-    case update.type: {
-      const newArray = [...state]
-      const elementIndex = newArray.findIndex(
-        (el) => el.id === action.payload.id,
-      )
-      newArray[elementIndex] = { ...newArray[elementIndex], ...action.payload }
-      return newArray
-    }
-    case remove.type: {
-      const newArray = [...state].filter((el) => el.id !== action.payload.id)
-      return newArray
-    }
-    default:
-      return state
-  }
 }
 
 export default taskReduser

@@ -30,7 +30,7 @@ const App = () => {
 
   return (
     <>
-      <h1>App</h1>
+      <h1>App</h1>      
       <ul>
         {state.map((el) => (
           <li key={el.id}>
