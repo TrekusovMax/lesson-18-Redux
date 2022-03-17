@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 
 import configureStore from './store/store'
-import { taskCompleted, taskDeleted, titleChanged } from './store/task'
+import {  completeTask, taskDeleted, titleChanged } from './store/task'
 
 const store = configureStore()
 
@@ -16,10 +16,6 @@ const App = () => {
       setState(store.getState())
     })
   }, [])
-
-  const completeTask = (taskId) => {
-    store.dispatch(taskCompleted(taskId))
-  }
 
   const changeTitle = (taskId) => {
     store.dispatch(titleChanged(taskId))
@@ -36,7 +32,7 @@ const App = () => {
           <li key={el.id}>
             <p>{el.title}</p>
             <p>{`Completed: ${el.complited}`}</p>
-            <button onClick={() => completeTask(el.id)}>Complete</button>
+            <button onClick={() => store.dispatch(completeTask(el.id))}>Complete</button>
             <button onClick={() => changeTitle(el.id)}>Change title</button>
             <button onClick={() => deleteTask(el.id)}>Delete title</button>
             <hr />
