@@ -1,12 +1,14 @@
-import { applyMiddleware, createStore, compose } from 'redux'
-import taskReduser from './task'
-import { logger } from './middleware/logger';
-import { thunk } from './middleware/thunk';
+import taskReduser from "./task"
+import { logger } from "./middleware/logger"
 
-const middlewareEnhacer = applyMiddleware(logger, thunk)
+import { configureStore } from "@reduxjs/toolkit"
 
-function configureStore() {
-  return createStore(taskReduser, compose(middlewareEnhacer,   
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()))
+function createStore() {
+	return configureStore({
+		reducer: taskReduser,
+		middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+		devTools: process.env.NODE_ENV !== "production"
+	})
 }
-export default configureStore
+
+export default createStore
