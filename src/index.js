@@ -11,6 +11,7 @@ import {
   getTasks,
   getTasksLoadingStatus,
   loadTasks,
+  createTask,
   taskDeleted,
   titleChanged,
 } from './store/task'
@@ -25,13 +26,16 @@ const App = () => {
 
   useEffect(() => {
     dispatch(loadTasks())
-  }, [])
+  }, [dispatch])
 
   const changeTitle = (taskId) => {
     dispatch(titleChanged(taskId))
   }
   const deleteTask = (taskId) => {
     dispatch(taskDeleted(taskId))
+  }
+  const taskCreate = () => {
+    dispatch(createTask({ title: 'New task', completed: false }))
   }
   if (isLoading) {
     return <h1>Loading...</h1>
@@ -47,12 +51,13 @@ const App = () => {
         {state.map((el) => (
           <li key={el.id}>
             <p>{el.title}</p>
-            <p>{`Completed: ${el.complited}`}</p>
+            <p>{`Completed: ${el.completed}`}</p>
             <button onClick={() => dispatch(completeTask(el.id))}>
               Complete
             </button>
             <button onClick={() => changeTitle(el.id)}>Change title</button>
             <button onClick={() => deleteTask(el.id)}>Delete title</button>
+            <button onClick={() => taskCreate(el.id)}>Create</button>
             <hr />
           </li>
         ))}

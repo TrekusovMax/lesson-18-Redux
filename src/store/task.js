@@ -8,6 +8,10 @@ const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    create(state, action) {
+      state.entities.push(action.payload)
+      state.isLoading = false
+    },
     recived(state, action) {
       state.entities = action.payload
       state.isLoading = false
@@ -36,7 +40,8 @@ const taskSlice = createSlice({
 })
 
 const { actions, reducer: taskReduser } = taskSlice
-const { update, remove, recived, taskRequestFailed, taskRequested } = actions
+const { update, remove, recived, taskRequestFailed, taskRequested, create } =
+  actions
 
 export const loadTasks = () => async (dispatch) => {
   dispatch(taskRequested())
@@ -61,6 +66,17 @@ export function titleChanged(id) {
 }
 export function taskDeleted(id) {
   return remove({ id })
+}
+
+export const createTask = (payload) => async (dispatch) => {
+  dispatch(taskRequested())
+  try {
+    const data = await todoService.create(payload)
+    dispatch(create(data))
+  } catch (error) {
+    dispatch(taskRequestFailed(error.message))
+    dispatch(setError(error.message))
+  }
 }
 
 export const getTasks = () => (state) => state.tasks.entities
